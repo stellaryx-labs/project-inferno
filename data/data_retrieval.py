@@ -1,4 +1,5 @@
 import pandas as pd
+import pytz
 
 url = "https://firms.modaps.eosdis.nasa.gov/content/notebooks/sample_viirs_snpp_071223.csv"
 
@@ -124,3 +125,30 @@ region_dfs = {
 print("Fire records per region:")
 print(" | ".join([f"{region}: {len(dataframe)}" for region, dataframe in region_dfs.items()]))
 
+# Custom Filters
+"""
+- Confidence Level
+- Fire Radiative Power (FRP)
+- Time of Day (N || D)
+"""
+df_custom_world_day = world_df[(df['confidence'] == 'h') & (df['frp'] >= 5) & (df['daynight'] == 'D')].copy()
+df_custom_world_night = world_df[(df['confidence'] == 'h') & (df['frp'] >= 5) & (df['daynight'] == 'N')]
+
+print("Custom World Day Records:", len(df_custom_world_day))
+print("Custom World Night Records:", len(df_custom_world_night))
+
+# Date Time // Time Zones
+canada_df['acq_datetime'] = pd.to_datetime(canada_df['acq_date'] + ' ' + canada_df['acq_time'].astype(str).str.zfill(4), format='%Y-%m-%d %H%M')
+
+print ('Custom World Day Data:')
+canada_df['acq_datetime'].sample(5)
+
+# TODO: timezone converisons using the pytz library
+
+print('Canada TimeZones')
+for timeZone in pytz.country_timezones['CA']:
+    print(timeZone)
+
+# Now let's see the minimum and maximum datetime range available for Canada
+
+print ('Canada datetime value range: %s to %s' % (str(canada_df['acq_datetime'].min()), str(canada_df['acq_datetime'].max())))

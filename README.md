@@ -74,7 +74,8 @@ https://www.earthdata.nasa.gov/data/instruments/viirs/viirs-i-band-375-m-active-
 
 # To 
 https://firms.modaps.eosdis.nasa.gov/academy
-- [ ] Data Ingestion and Manipulation
+- [x] Data Ingestion and Manipulation
 - [ ] Using FIRMS API
 - [ ] Data Visualization
 - [ ] Data Subsetting
+- finish the video tutorials on how to use the FIRMS website 
