@@ -145,10 +145,9 @@ canada_df['acq_datetime'].sample(5)
 
 # TODO: timezone converisons using the pytz library
 
-print('Canada TimeZones')
+print('Canada time zones')
 for timeZone in pytz.country_timezones['CA']:
     print(timeZone)
 
 # Now let's see the minimum and maximum datetime range available for Canada
-
 print ('Canada datetime value range: %s to %s' % (str(canada_df['acq_datetime'].min()), str(canada_df['acq_datetime'].max())))
