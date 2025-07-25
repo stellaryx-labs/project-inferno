@@ -58,8 +58,8 @@ def obtain_shapefiles():
     }
 
 # Subsetting functions for Eaton and Palisades data
-def subset_palisades_data():
-    palisades_data = obtain_specific_fire_data("MODIS")
+def subset_palisades_data(satellite_name):
+    palisades_data = obtain_specific_fire_data(satellite_name)
     palisades_shape_gdf = obtain_shapefiles()["palisades"]
     palisades_fire_gdf = gpd.GeoDataFrame(
         palisades_data,
@@ -69,8 +69,8 @@ def subset_palisades_data():
     palisades_fire_gdf = palisades_fire_gdf[palisades_fire_gdf.within(palisades_shape_gdf.unary_union)]
     return palisades_fire_gdf
 
-def subset_eaton_data():
-    eaton_data = obtain_specific_fire_data("MODIS")
+def subset_eaton_data(satellite_name):
+    eaton_data = obtain_specific_fire_data(satellite_name)
     eaton_shape_gdf = obtain_shapefiles()["eaton"]
     eaton_fires_gdf = gpd.GeoDataFrame(
         eaton_data,
@@ -116,9 +116,9 @@ def print_analytics():
     print("VIIRS Suomi Sample \n", viirs_suomi_df.head(1))
     print("Landsat Sample \n", landsat_df.head(1))
 
-def print_subset_info():
-    palisades_fire_gdf = subset_palisades_data()
-    eaton_fires_gdf = subset_eaton_data()
+def print_subset_info(satellite_name):
+    palisades_fire_gdf = subset_palisades_data(satellite_name)
+    eaton_fires_gdf = subset_eaton_data(satellite_name)
 
     print("Palisades Fire DataFrame Shape:", palisades_fire_gdf.shape)
     print("Eaton Fire DataFrame Shape:", eaton_fires_gdf.shape)

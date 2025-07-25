@@ -6,7 +6,7 @@ from shapely.geometry import Point
 
 from config import custom_config, EATON_GEOJSON_PATH, PALISADES_GEOJSON_PATH, HOME_PAGE_PATH
 from services.firms import subset_eaton_data, subset_palisades_data, convert_timezone_for_dataset
-from config import TIMEZONE, COORDINATE_REFERENCE_SYSTEM
+from config import TIMEZONE, COORDINATE_REFERENCE_SYSTEM, DEFAULT_SATELLITE
 
 """
 Obtain all relevant fire data to be displayed within the home page of the Streamlit application
@@ -26,12 +26,12 @@ def _obtain_perimeter_data():
 Obtain the localized fire data for the 2025 Eaton and Palisades Fires
 Return: Pandas DataFrame containing the localized fire data for both fires
 """
-def _obtain_localized_fire_data():
-    eaton_subset = subset_eaton_data()
+def _obtain_localized_fire_data(satellite_name):
+    eaton_subset = subset_eaton_data(satellite_name)
     print("ss", eaton_subset["acq_date"].dtype)
     localized_eaton_subset = convert_timezone_for_dataset(eaton_subset, TIMEZONE)
     print(eaton_subset["acq_date"].dtype)
-    palisades_subset = subset_palisades_data()
+    palisades_subset = subset_palisades_data(satellite_name)
     localized_palisades_subset = convert_timezone_for_dataset(palisades_subset, TIMEZONE)
     return {
         "eaton": localized_eaton_subset,
@@ -52,10 +52,16 @@ def _convert_dataframe_to_geopandas_coordinates(df):
 """
 Main function to display the contents of the home page within the Streamlit application
 """
-def display_home():
+def display_satellite_dropdown():
+    satellite_options = ["MODIS", "VIIRS_J1", "VIIRS_J2", "VIIRS_Suomi", "LANDSAT"]
+    selected_satellite = st.selectbox("Choose satellite dataset", satellite_options)
+
+    display_map(selected_satellite)
+
+def display_map(satellite_name):
     # Set the origin of the map to the NADIR point
     perimeter_data = _obtain_perimeter_data()
-    fire_subset_data = _obtain_localized_fire_data()
+    fire_subset_data = _obtain_localized_fire_data(satellite_name)
     gpd_eaton_points = _convert_dataframe_to_geopandas_coordinates(fire_subset_data["eaton"])
     gpd_palisades_points = _convert_dataframe_to_geopandas_coordinates(fire_subset_data["palisades"])
 
@@ -74,6 +80,9 @@ def display_home():
         width=800,
         center_map=True
     )
+
+def display_home():
+    display_satellite_dropdown()
 
 
 
