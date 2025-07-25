@@ -3,6 +3,7 @@ import geopandas as gpd
 from keplergl import KeplerGl
 from streamlit_keplergl import keplergl_static
 from shapely.geometry import Point
+import pandas as pd
 
 from config import custom_config, EATON_GEOJSON_PATH, PALISADES_GEOJSON_PATH, HOME_PAGE_PATH
 from services.firms import subset_eaton_data, subset_palisades_data, convert_timezone_for_dataset
@@ -52,16 +53,40 @@ def _convert_dataframe_to_geopandas_coordinates(df):
 """
 Main function to display the contents of the home page within the Streamlit application
 """
-def display_satellite_dropdown():
+
+def display_menu():
     satellite_options = ["MODIS", "VIIRS_J1", "VIIRS_J2", "VIIRS_Suomi", "LANDSAT"]
     selected_satellite = st.selectbox("Choose satellite dataset", satellite_options)
 
-    display_map(selected_satellite)
+    # Obtain data to get min/max dates
+    fire_data = _obtain_localized_fire_data(selected_satellite)
+    all_dates = pd.concat([
+        fire_data["eaton"]["acq_date"],
+        fire_data["palisades"]["acq_date"]
+    ])
+    min_date, max_date = all_dates.min(), all_dates.max()
 
-def display_map(satellite_name):
+    # Timeline range slider
+    date_range = st.slider(
+        "Select date range",
+        min_value=min_date,
+        max_value=max_date,
+        value=(min_date, max_date),
+        format="YYYY-MM-DD"
+    )
+
+    display_map(selected_satellite, date_range)
+
+def display_map(satellite_name, date_range):
     # Set the origin of the map to the NADIR point
     perimeter_data = _obtain_perimeter_data()
     fire_subset_data = _obtain_localized_fire_data(satellite_name)
+
+    for fire in ["eaton", "palisades"]:
+        mask = (fire_subset_data[fire]["acq_date"] >= date_range[0]) & \
+               (fire_subset_data[fire]["acq_date"] <= date_range[1])
+        fire_subset_data[fire] = fire_subset_data[fire][mask]
+
     gpd_eaton_points = _convert_dataframe_to_geopandas_coordinates(fire_subset_data["eaton"])
     gpd_palisades_points = _convert_dataframe_to_geopandas_coordinates(fire_subset_data["palisades"])
 
@@ -82,7 +107,7 @@ def display_map(satellite_name):
     )
 
 def display_home():
-    display_satellite_dropdown()
+    display_menu()
 
 
 
