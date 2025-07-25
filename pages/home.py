@@ -1,11 +1,8 @@
 import streamlit as st
 import geopandas as gpd
 from keplergl import KeplerGl
-import os
-import sys
-import pandas as pd
 
-from config import custom_config, EATON_GEOJSON_PATH, PALISADES_GEOJSON_PATH
+from config import custom_config, EATON_GEOJSON_PATH, PALISADES_GEOJSON_PATH, HOME_PAGE_PATH
 
 """
 Obtain all relevant fire data to be displayed within the home page of the Streamlit application
@@ -22,10 +19,6 @@ def _obtain_perimeter_data():
     return {"eaton": eaton_json_str, "palisades": palisades_json_str}
 
 """
-
-"""
-
-"""
 Main function to display the contents of the home page within the Streamlit application
 """
 def display_home():
@@ -35,7 +28,7 @@ def display_home():
     map_ = KeplerGl(height=600, config=custom_config)
     map_.add_data(data=perimeter_data["eaton"], name="2025 Eaton Fire")
     map_.add_data(data=perimeter_data["palisades"], name="2025 Palisades Fire")
-    map_.save_to_html(file_name="../main_map.html")
-    st.components.v1.html(open("main_map.html").read(), height=600, scrolling=True)
+    map_.save_to_html(file_name=HOME_PAGE_PATH)
+    st.components.v1.html(open(HOME_PAGE_PATH).read(), height=600, scrolling=True)
 
 

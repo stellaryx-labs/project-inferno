@@ -14,6 +14,11 @@ VIIRS_J2_DATA_PATH = ROOT_DIR / "firms_data" / "J2_VIIRS_C2.csv"
 VIIRS_SUOMI_DATA_PATH = ROOT_DIR / "firms_data" / "SUOMI_VIIRS_C2.csv"
 LANDSAT_DATA_PATH = ROOT_DIR / "firms_data" / "LANDSAT.csv"
 
+# STREAMLIT PAGES
+HOME_PAGE_PATH = ROOT_DIR / "main_map.html"
+PALISADES_PATH = ROOT_DIR / "palisades.html"
+EATON_PATH = ROOT_DIR / "eaton.html"
+
 custom_config = {
     "mapState": {
         "latitude": 34.17028,  # Default latitude
