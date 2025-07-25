@@ -26,8 +26,9 @@ Return: Pandas DataFrame containing the localized fire data for both fires
 """
 def _obtain_localized_fire_data():
     eaton_subset = subset_eaton_data()
+    print("ss", eaton_subset["acq_date"].dtype)
     localized_eaton_subset = convert_timezone_for_dataset(eaton_subset, TIMEZONE)
-
+    print(eaton_subset["acq_date"].dtype)
     palisades_subset = subset_palisades_data()
     localized_palisades_subset = convert_timezone_for_dataset(palisades_subset, TIMEZONE)
     return {

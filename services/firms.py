@@ -90,10 +90,9 @@ def subset_eaton_data():
         pd.DataFrame: DataFrame with 'acq_date' converted to the specified timezone.
 """
 def convert_timezone_for_dataset(df, timezone):
-    df['acq_date'] = pd.to_datetime(df['acq_date'], utc=True)
-    df['acq_date'] = df['acq_date'].dt.tz_convert(timezone)
+    df['acq_datetime'] = pd.to_datetime(df['acq_date'] + ' ' + df['acq_time'].astype(str).str.zfill(4), format='%Y-%m-%d %H%M')
+    df['acq_datetime'].dt.tz_localize('GMT').dt.tz_convert(timezone)
     return df
-
 
 # PRINTING METHODS
 def print_analytics():
