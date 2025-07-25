@@ -5,13 +5,11 @@ import os
 import sys
 import pandas as pd
 
+from pages.home import display_home
+
 # ENV SETUP: look into and find the proper commands for setting env variables
 os.environ['GDAL_DATA'] = os.path.join(f'{os.sep}'.join(sys.executable.split(os.sep)[:-1]), 'Library', 'share', 'gdal')
 
-
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-0x02 > STREAMLIT APP CONFIGURATION
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 st.set_page_config(
     page_title="PyroMap",
     page_icon="🔥",
