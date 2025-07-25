@@ -1,6 +1,7 @@
 import streamlit as st
 import geopandas as gpd
 from keplergl import KeplerGl
+from streamlit_keplergl import keplergl_static
 
 from config import custom_config, EATON_GEOJSON_PATH, PALISADES_GEOJSON_PATH, HOME_PAGE_PATH
 from services.firms import subset_eaton_data, subset_palisades_data, convert_timezone_for_dataset
@@ -56,12 +57,19 @@ def display_home():
     map_.add_data(data=perimeter_data["eaton"], name="2025 Eaton Fire")
     map_.add_data(data=perimeter_data["palisades"], name="2025 Palisades Fire")
 
+    print("Eaton Fire Data:", gpd_eaton_points.head())
     # Plot the localized fire data for both fires using geopoints
-    map_.add_data(data=gpd_eaton_points, name="Localized Eaton Fire Data")
-    map_.add_data(data=gpd_palisades_points, name="Localized Palisades Fire Data")
+    # map_.add_data(data=gpd_eaton_points, name="Localized Eaton Fire Data")
+    # map_.add_data(data=gpd_palisades_points, name="Localized Palisades Fire Data")
 
-    map_.save_to_html(file_name=HOME_PAGE_PATH)
-    st.components.v1.html(open(HOME_PAGE_PATH).read(), height=600, scrolling=True)
+    keplergl_static(
+        map_,
+        height=600,
+        width=800,
+        center_map=True,
+        config=custom_config,
+        use_container_width=True
+    )
 
 
 
