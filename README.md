@@ -7,15 +7,11 @@ conda create --name pyromap
 conda activate pyromap
 ```
 
-### Scope of this Project // include a dashboard to contain all of the following... 
-- Data Analysis and Visualization of the Fire Data 
+### Scope of this Project // include a dashboard to contain all of the following...
 - Fire Severity Classification
 - Thermal Signature Fingerprinting
 - Most Dangerous Fires // take into consideration population density, proximity to cities, infrastructure damage, and other factors
-- Predictive Fire Spread Estimator
-
-SCOPE THE Project to the Palisades Fires within Los Angeles, California 
-
+- Predictive Fire Spread Estimator // for future fire spread prediction
 - Article to Introduce Beginners to the Project // How to use the NASA FIRMS API
 
 ### Libraries 

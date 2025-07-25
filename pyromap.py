@@ -17,7 +17,7 @@ st.set_page_config(
 st.title("2025 Eaton / Palisades Fires")
 
 # Create three tabs
-tab1, tab2, tab3 = st.tabs(["Main", "Eaton", "Palisades"])
+tab1, tab2, tab3 = st.tabs(["Fire Map", "Fire Severity Classification", "Thermal Signature Fingerprinting", "Most Dangerous Fires", "Fire Spread Estimator"])
 
 with tab1:
     display_home()
