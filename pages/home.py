@@ -5,29 +5,36 @@ import os
 import sys
 import pandas as pd
 
+"""
+Main function to display the contents of the home page within the Streamlit application
+"""
+def display_home():
+    pass
+
+"""
+Obtain all relevant fire data to be displayed within the home page of the Streamlit application
+Return: <Dict> fields: {eaton <Str: JSON Str for Perimeter>, palisades <Str: JSON Str for Perimeter>}
+"""
+def obtain_data():
+    # Install and Leverage the GEOJSON (perimeter) file for the 2025 Eaton Fire
+    eaton_gdf = gpd.read_file("./datasets/Eaton_Perimeter_20250121.geojson")
+    eaton_json_str = eaton_gdf.to_json()
+
+    palisades_gdf = gpd.read_file("./datasets/Palisades_Perimeter_20250121.geojson")
+    palisades_json_str = palisades_gdf.to_json()
+
+    return {"eaton": eaton_json_str, "palisades": palisades_json_str}
+
+
 
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 0x00 > START BY PROCESSING PERIMETER DATA AND DISPLAYING IT ONTO A STREAMLIT APP
 """""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-# Install and Leverage the GEOJSON (perimeter) file for the 2025 Eaton Fire
-eaton_gdf = gpd.read_file("./datasets/Eaton_Perimeter_20250121.geojson")
-print(type(eaton_gdf))
-eaton_json_str = eaton_gdf.to_json()
-print(eaton_json_str)
 
-palisades_gdf = gpd.read_file("./datasets/Palisades_Perimeter_20250121.geojson")
-palisades_json_str = palisades_gdf.to_json()
+
+
 
 # Set the origin of the map to the NADIR point
-custom_config = {
-    "mapState": {
-        "latitude": 34.17028,  # Default latitude
-        "longitude": -118.34667,  # Default longitude
-        "zoom": 9,  # Default zoom level
-        "bearing": 0,
-        "pitch": 0,
-    }
-}
 
 map_ = KeplerGl(height=600, config=custom_config)
 map_.add_data(data=eaton_json_str, name="2025 Eaton Fire")
