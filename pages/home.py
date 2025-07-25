@@ -2,6 +2,7 @@ import streamlit as st
 import geopandas as gpd
 from keplergl import KeplerGl
 from streamlit_keplergl import keplergl_static
+from shapely.geometry import Point
 
 from config import custom_config, EATON_GEOJSON_PATH, PALISADES_GEOJSON_PATH, HOME_PAGE_PATH
 from services.firms import subset_eaton_data, subset_palisades_data, convert_timezone_for_dataset
@@ -37,10 +38,15 @@ def _obtain_localized_fire_data():
         "palisades": localized_palisades_subset
     }
 
-def _convert_dataframe_to_geopandas(df):
+def _convert_dataframe_to_geopandas_coordinates(df):
+    # create a new copy dataframe that only contains the lat and long columns
+    df = df.copy()
+    df = df[["latitude", "longitude"]].dropna()
+
     gdf = gpd.GeoDataFrame(
         df, geometry=gpd.points_from_xy(df.longitude, df.latitude), crs=COORDINATE_REFERENCE_SYSTEM
     )
+
     return gdf
 
 """
@@ -50,8 +56,8 @@ def display_home():
     # Set the origin of the map to the NADIR point
     perimeter_data = _obtain_perimeter_data()
     fire_subset_data = _obtain_localized_fire_data()
-    gpd_eaton_points = _convert_dataframe_to_geopandas(fire_subset_data["eaton"])
-    gpd_palisades_points = _convert_dataframe_to_geopandas(fire_subset_data["palisades"])
+    gpd_eaton_points = _convert_dataframe_to_geopandas_coordinates(fire_subset_data["eaton"])
+    gpd_palisades_points = _convert_dataframe_to_geopandas_coordinates(fire_subset_data["palisades"])
 
     map_ = KeplerGl(height=600, config=custom_config)
     map_.add_data(data=perimeter_data["eaton"], name="2025 Eaton Fire")
@@ -59,16 +65,14 @@ def display_home():
 
     print("Eaton Fire Data:", gpd_eaton_points.head())
     # Plot the localized fire data for both fires using geopoints
-    # map_.add_data(data=gpd_eaton_points, name="Localized Eaton Fire Data")
-    # map_.add_data(data=gpd_palisades_points, name="Localized Palisades Fire Data")
+    map_.add_data(data=gpd_eaton_points, name="Localized Eaton Fire Data")
+    map_.add_data(data=gpd_palisades_points, name="Localized Palisades Fire Data")
 
     keplergl_static(
         map_,
         height=600,
         width=800,
-        center_map=True,
-        config=custom_config,
-        use_container_width=True
+        center_map=True
     )
 
 

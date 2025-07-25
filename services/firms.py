@@ -66,6 +66,7 @@ def subset_palisades_data():
         geometry=gpd.points_from_xy(palisades_data['longitude'], palisades_data['latitude']),
         crs=palisades_shape_gdf.crs
     )
+    palisades_fire_gdf = palisades_fire_gdf[palisades_fire_gdf.within(palisades_shape_gdf.unary_union)]
     return palisades_fire_gdf
 
 def subset_eaton_data():
@@ -76,6 +77,7 @@ def subset_eaton_data():
         geometry=gpd.points_from_xy(eaton_data['longitude'], eaton_data['latitude']),
         crs=eaton_shape_gdf.crs
     )
+    eaton_fires_gdf = eaton_fires_gdf[eaton_fires_gdf.within(eaton_shape_gdf.unary_union)]
     return eaton_fires_gdf
 
 # Timezone Localization
