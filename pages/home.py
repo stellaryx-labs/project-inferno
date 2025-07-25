@@ -66,13 +66,15 @@ def display_menu():
     ])
     min_date, max_date = all_dates.min(), all_dates.max()
 
+    print(min_date.dtype, max_date.dtype)
+
     # Timeline range slider
     date_range = st.slider(
-        "Select date range",
         min_value=min_date,
         max_value=max_date,
         value=(min_date, max_date),
-        format="YYYY-MM-DD"
+        format="YYYY-MM-DD",
+        label="Select date range for fire data"
     )
 
     display_map(selected_satellite, date_range)
@@ -108,6 +110,3 @@ def display_map(satellite_name, date_range):
 
 def display_home():
     display_menu()
-
-
-
