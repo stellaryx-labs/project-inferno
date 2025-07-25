@@ -4,6 +4,11 @@ from pathlib import Path
 
 ROOT_DIR = Path(__file__).parent
 
+LAT = 34.17028
+LONG = -118.34667
+TIMEZONE = "America/Los_Angeles"
+COORDINATE_REFERENCE_SYSTEM = "EPSG:4326"
+
 ### ALL RELEVANT DATA PATHS AND CONFIGURATIONS FOR THE PYROMAP STREAMLIT APP ###
 EATON_GEOJSON_PATH = ROOT_DIR / "datasets" / "Eaton_Perimeter_20250121.geojson"
 PALISADES_GEOJSON_PATH = ROOT_DIR / "datasets" / "Palisades_Perimeter_20250121.geojson"
@@ -21,8 +26,8 @@ EATON_PATH = ROOT_DIR / "eaton.html"
 
 custom_config = {
     "mapState": {
-        "latitude": 34.17028,  # Default latitude
-        "longitude": -118.34667,  # Default longitude
+        "latitude": LAT,  # Default latitude
+        "longitude": LONG,  # Default longitude
         "zoom": 9,  # Default zoom level
         "bearing": 0,
         "pitch": 0,

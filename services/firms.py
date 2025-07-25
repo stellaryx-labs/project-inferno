@@ -12,6 +12,7 @@ import pandas as pd
 import geopandas as gpd
 from config import MODIS_DATA_PATH, VIIRS_J1_DATA_PATH, VIIRS_J2_DATA_PATH, VIIRS_SUOMI_DATA_PATH, LANDSAT_DATA_PATH
 import pytz
+from timezonefinder import TimezoneFinder
 from config import EATON_GEOJSON_PATH, PALISADES_GEOJSON_PATH
 
 """
@@ -78,19 +79,20 @@ def subset_eaton_data():
     return eaton_fires_gdf
 
 # Timezone Localization
-def convert_datetime_to_timezone(dt, timezone):
-    """
-    Converts a datetime object to the specified timezone.
+"""
+    Converts the 'acq_date' column of the DataFrame to the specified timezone.
 
     Args:
-        dt (datetime): The datetime object to convert.
-        timezone (str): The timezone to convert to (e.g., 'America/Los_Angeles').
+        df (pd.DataFrame): The DataFrame containing fire data.
+        timezone (str): The timezone to convert to.
 
     Returns:
-        datetime: The converted datetime object in the specified timezone.
-    """
-    tz = pytz.timezone(timezone)
-    return dt.astimezone(tz)
+        pd.DataFrame: DataFrame with 'acq_date' converted to the specified timezone.
+"""
+def convert_timezone_for_dataset(df, timezone):
+    df['acq_date'] = pd.to_datetime(df['acq_date'], utc=True)
+    df['acq_date'] = df['acq_date'].dt.tz_convert(timezone)
+    return df
 
 
 # PRINTING METHODS
@@ -124,9 +126,10 @@ def print_subset_info():
     print("Eaton Fire Sample \n", eaton_fires_gdf.head(1))
 
 def print_california_timezones():
-    for timeZone in pytz.country_timezones['CA']:
-        print(timeZone)
+    for timezone in pytz.country_timezones['CA']:
+        print(timezone)
 
+# Find the timezone for a specific location
 """
     Returns the timezone for a given latitude and longitude.
 
@@ -136,9 +139,7 @@ def print_california_timezones():
 
     Returns:
         str: Timezone name.
-    """
-# Find the timezone for a specific location
+"""
 def get_timezone_for_location(latitude, longitude):
-    from timezonefinder import TimezoneFinder
     tf = TimezoneFinder()
     return tf.timezone_at(lat=latitude, lng=longitude)
