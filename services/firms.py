@@ -78,7 +78,6 @@ def subset_eaton_data():
     return eaton_fires_gdf
 
 # Timezone Localization
-
 def convert_datetime_to_timezone(dt, timezone):
     """
     Converts a datetime object to the specified timezone.
@@ -127,3 +126,19 @@ def print_subset_info():
 def print_california_timezones():
     for timeZone in pytz.country_timezones['CA']:
         print(timeZone)
+
+"""
+    Returns the timezone for a given latitude and longitude.
+
+    Args:
+        latitude (float): Latitude of the location.
+        longitude (float): Longitude of the location.
+
+    Returns:
+        str: Timezone name.
+    """
+# Find the timezone for a specific location
+def get_timezone_for_location(latitude, longitude):
+    from timezonefinder import TimezoneFinder
+    tf = TimezoneFinder()
+    return tf.timezone_at(lat=latitude, lng=longitude)
