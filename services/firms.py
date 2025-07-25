@@ -12,26 +12,7 @@ import pandas as pd
 import geopandas as gpd
 from config import MODIS_DATA_PATH, VIIRS_J1_DATA_PATH, VIIRS_J2_DATA_PATH, VIIRS_SUOMI_DATA_PATH, LANDSAT_DATA_PATH
 import pytz
-
-def print_analytics():
-    modis_df = pd.read_csv(MODIS_DATA_PATH)
-    viirs_j1_df = pd.read_csv(VIIRS_J1_DATA_PATH)
-    viirs_j2_df = pd.read_csv(VIIRS_J2_DATA_PATH)
-    viirs_suomi_df = pd.read_csv(VIIRS_SUOMI_DATA_PATH)
-    landsat_df = pd.read_csv(LANDSAT_DATA_PATH)
-
-    print("MODIS DataFrame Shape:", modis_df.shape)
-    print("VIIRS J1 DataFrame Shape:", viirs_j1_df.shape)
-    print("VIIRS J2 DataFrame Shape:", viirs_j2_df.shape)
-    print("VIIRS Suomi DataFrame Shape:", viirs_suomi_df.shape)
-    print("Landsat DataFrame Shape:", landsat_df.shape)
-
-    print("MODIS Sample \n", modis_df.head(1))
-    print("VIIRS J1 Sample \n", viirs_j1_df.head(1))
-    print("VIIRS J2 Sample \n", viirs_j2_df.head(1))
-    print("VIIRS Suomi Sample \n", viirs_suomi_df.head(1))
-    print("Landsat Sample \n", landsat_df.head(1))
-
+from config import EATON_GEOJSON_PATH, PALISADES_GEOJSON_PATH
 
 """
 Fetches the fire data from the specified CSV files and returns them as pandas DataFrames.
@@ -68,8 +49,8 @@ Returns:
     dict: A dictionary containing GeoDataFrames for each fire data source.
 """
 def obtain_shapefiles():
-    palisades_gdf = gpd.read_file(states_shapefile_url)
-    eaton_gdf = gpd.read_file(states_shapefile_url)
+    palisades_gdf = gpd.read_file(PALISADES_GEOJSON_PATH)
+    eaton_gdf = gpd.read_file(EATON_GEOJSON_PATH)
     return {
         "palisades": palisades_gdf,
         "eaton": eaton_gdf
@@ -111,6 +92,37 @@ def convert_datetime_to_timezone(dt, timezone):
     """
     tz = pytz.timezone(timezone)
     return dt.astimezone(tz)
+
+
+# PRINTING METHODS
+def print_analytics():
+    modis_df = pd.read_csv(MODIS_DATA_PATH)
+    viirs_j1_df = pd.read_csv(VIIRS_J1_DATA_PATH)
+    viirs_j2_df = pd.read_csv(VIIRS_J2_DATA_PATH)
+    viirs_suomi_df = pd.read_csv(VIIRS_SUOMI_DATA_PATH)
+    landsat_df = pd.read_csv(LANDSAT_DATA_PATH)
+
+    print("MODIS DataFrame Shape:", modis_df.shape)
+    print("VIIRS J1 DataFrame Shape:", viirs_j1_df.shape)
+    print("VIIRS J2 DataFrame Shape:", viirs_j2_df.shape)
+    print("VIIRS Suomi DataFrame Shape:", viirs_suomi_df.shape)
+    print("Landsat DataFrame Shape:", landsat_df.shape)
+
+    print("MODIS Sample \n", modis_df.head(1))
+    print("VIIRS J1 Sample \n", viirs_j1_df.head(1))
+    print("VIIRS J2 Sample \n", viirs_j2_df.head(1))
+    print("VIIRS Suomi Sample \n", viirs_suomi_df.head(1))
+    print("Landsat Sample \n", landsat_df.head(1))
+
+def print_subset_info():
+    palisades_fire_gdf = subset_palisades_data()
+    eaton_fires_gdf = subset_eaton_data()
+
+    print("Palisades Fire DataFrame Shape:", palisades_fire_gdf.shape)
+    print("Eaton Fire DataFrame Shape:", eaton_fires_gdf.shape)
+
+    print("Palisades Fire Sample \n", palisades_fire_gdf.head(1))
+    print("Eaton Fire Sample \n", eaton_fires_gdf.head(1))
 
 def print_california_timezones():
     for timeZone in pytz.country_timezones['CA']:
