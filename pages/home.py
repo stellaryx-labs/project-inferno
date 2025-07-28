@@ -2,7 +2,6 @@ import streamlit as st
 import streamlit.components.v1 as components
 import geopandas as gpd
 from keplergl import KeplerGl
-from streamlit_keplergl import keplergl_static
 import pandas as pd
 
 from config import custom_config, EATON_GEOJSON_PATH, PALISADES_GEOJSON_PATH, HOME_PAGE_PATH
@@ -55,7 +54,7 @@ def _convert_dataframe_to_geopandas_coordinates(df):
 Main function to display the contents of the home page within the Streamlit application
 """
 
-def display_map(satellite_name, date_range):
+def display_map(satellite_name, date_range, config):
     perimeter_data = _obtain_perimeter_data()
     fire_subset_data = _obtain_localized_fire_data(satellite_name)
 
@@ -67,10 +66,10 @@ def display_map(satellite_name, date_range):
     combined_data = pd.concat([fire_subset_data["eaton"], fire_subset_data["palisades"]])
     gpd_combined_points = _convert_dataframe_to_geopandas_coordinates(combined_data)
 
-    map_ = KeplerGl(height=600, config=custom_config)
+    map_ = KeplerGl(height=600, config=config)
+    map_.add_data(data=gpd_combined_points, name="fire-data")
     map_.add_data(data=perimeter_data["eaton"], name="eaton-perimeter")
     map_.add_data(data=perimeter_data["palisades"], name="palisades-perimeter")
-    map_.add_data(data=gpd_combined_points, name="fire-data")
 
     html_path = "keplergl_map.html"
     map_.save_to_html(file_name=html_path, read_only=True)
@@ -81,6 +80,23 @@ def display_map(satellite_name, date_range):
 def display_menu():
     satellite_options = ["MODIS", "VIIRS_J1", "VIIRS_J2", "VIIRS_Suomi"]
     selected_satellite = st.selectbox("Choose satellite dataset", satellite_options)
+
+    # update the custom config based on the selected heatmap display option
+    # dict to map key to value
+    key_value = {"FRP (MW)": "frp", "Brightness (Channel 21/22) [Kelvin]": "brightness", "Brightness (Channel 31) [Kelvin]": "bright_t31"}
+    value_options = ["FRP (MW)", "Brightness (Channel 21/22) [Kelvin]", "Brightness (Channel 31) [Kelvin]"]
+    selected_value = st.selectbox("Choose heatmap value", value_options)
+    selected_val = key_value[selected_value]
+
+    custom_config["config"]["visState"]["layers"][0]["config"]["weightField"]["name"] = selected_val
+
+    # Day/Night toggle
+
+    night_mode = st.checkbox("Night mode", value=False)
+    if night_mode:
+        custom_config["config"]["mapStyle"] = {"styleType": "dark"}
+    else:
+        custom_config["config"]["mapStyle"] = {"styleType": "light"}
 
     # Obtain data to get min/max dates
     fire_data = _obtain_localized_fire_data(selected_satellite)
@@ -101,7 +117,7 @@ def display_menu():
         label="Select date range for fire data"
     )
 
-    display_map(selected_satellite, date_range)
+    display_map(selected_satellite, date_range, custom_config)
 
 def display_home():
     display_menu()

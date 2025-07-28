@@ -59,34 +59,40 @@ custom_config = {
                         }
                     }
                 },
-                {
-                    "id": "eaton-perimeter",
-                    "type": "polygon",
-                    "config": {
-                        "dataId": "eaton-perimeter",
-                        "label": "Eaton Fire Perimeter",
-                        "visConfig": {
-                            "opacity": 0,  # Lower fill opacity
-                            "strokeOpacity": 0.8,
-                            "fillColor": [255, 140, 0],
-                            "outline": True
+                    {
+                        "id": "eaton-perimeter",
+                        "type": "polygon",
+                        "config": {
+                            "dataId": "eaton-perimeter",
+                            "label": "Eaton Fire Perimeter",
+                            "visConfig": {
+                                "opacity": 0.1,  # Lower fill opacity
+                                "strokeOpacity": 1,
+                                "outline": True,
+                                "outlineColor": [0, 0, 0],
+                                "thickness": 2,
+                                "stroked": True,
+                                "filled": False,
+                            }
+                        }
+                    },
+                    {
+                        "id": "palisades-perimeter",
+                        "type": "polygon",
+                        "config": {
+                            "dataId": "palisades-perimeter",
+                            "label": "Palisades Fire Perimeter",
+                            "visConfig": {
+                                "opacity": 0,  # Lower fill opacity
+                                "strokeOpacity": 0.8,
+                                "outline": True,
+                                "outlineColor": [0, 0, 0],
+                                "thickness": 2,
+                                "stroked": True,
+                                "filled": False,
+                            }
                         }
                     }
-                },
-                {
-                    "id": "palisades-perimeter",
-                    "type": "polygon",
-                    "config": {
-                        "dataId": "palisades-perimeter",
-                        "label": "Palisades Fire Perimeter",
-                        "visConfig": {
-                            "opacity": 0,  # Lower fill opacity
-                            "strokeOpacity": 0.8,
-                            "fillColor": [0, 140, 255],
-                            "outline": True
-                        }
-                    }
-                }
             ]
         },
         "mapState": {
