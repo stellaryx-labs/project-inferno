@@ -3,6 +3,7 @@
 - make each satellite marker a different color 
 - add a day/night toggle to the map
 - add a color magnitude / richensss display onto the map
+- get a badass snapshot for the article
 
 make an intensity toggle: FRP
 make a brightness / temp toggle: Bright_ti4, Bright_ti5

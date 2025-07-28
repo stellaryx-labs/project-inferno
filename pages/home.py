@@ -2,7 +2,6 @@ import streamlit as st
 import geopandas as gpd
 from keplergl import KeplerGl
 from streamlit_keplergl import keplergl_static
-from shapely.geometry import Point
 import pandas as pd
 
 from config import custom_config, EATON_GEOJSON_PATH, PALISADES_GEOJSON_PATH, HOME_PAGE_PATH
@@ -29,9 +28,7 @@ Return: Pandas DataFrame containing the localized fire data for both fires
 """
 def _obtain_localized_fire_data(satellite_name):
     eaton_subset = subset_eaton_data(satellite_name)
-    print("ss", eaton_subset["acq_date"].dtype)
     localized_eaton_subset = convert_timezone_for_dataset(eaton_subset, TIMEZONE)
-    print(eaton_subset["acq_date"].dtype)
     palisades_subset = subset_palisades_data(satellite_name)
     localized_palisades_subset = convert_timezone_for_dataset(palisades_subset, TIMEZONE)
     return {
@@ -55,7 +52,7 @@ Main function to display the contents of the home page within the Streamlit appl
 """
 
 def display_menu():
-    satellite_options = ["MODIS", "VIIRS_J1", "VIIRS_J2", "VIIRS_Suomi", "LANDSAT"]
+    satellite_options = ["MODIS", "VIIRS_J1", "VIIRS_J2", "VIIRS_Suomi"]
     selected_satellite = st.selectbox("Choose satellite dataset", satellite_options)
 
     # Obtain data to get min/max dates
@@ -64,9 +61,9 @@ def display_menu():
         fire_data["eaton"]["acq_date"],
         fire_data["palisades"]["acq_date"]
     ])
-    min_date, max_date = all_dates.min(), all_dates.max()
 
-    print(min_date.dtype, max_date.dtype)
+    min_date = pd.to_datetime(all_dates.min()).to_pydatetime()
+    max_date = pd.to_datetime(all_dates.max()).to_pydatetime()
 
     # Timeline range slider
     date_range = st.slider(
@@ -85,8 +82,8 @@ def display_map(satellite_name, date_range):
     fire_subset_data = _obtain_localized_fire_data(satellite_name)
 
     for fire in ["eaton", "palisades"]:
-        mask = (fire_subset_data[fire]["acq_date"] >= date_range[0]) & \
-               (fire_subset_data[fire]["acq_date"] <= date_range[1])
+        mask = (pd.to_datetime(fire_subset_data[fire]["acq_date"]) >= date_range[0]) & \
+               (pd.to_datetime(fire_subset_data[fire]["acq_date"]) <= date_range[1])
         fire_subset_data[fire] = fire_subset_data[fire][mask]
 
     gpd_eaton_points = _convert_dataframe_to_geopandas_coordinates(fire_subset_data["eaton"])
