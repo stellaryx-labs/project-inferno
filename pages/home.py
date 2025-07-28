@@ -91,7 +91,6 @@ def display_menu():
     custom_config["config"]["visState"]["layers"][0]["config"]["weightField"]["name"] = selected_val
 
     # Day/Night toggle
-
     night_mode = st.checkbox("Night mode", value=False)
     if night_mode:
         custom_config["config"]["mapStyle"] = {"styleType": "dark"}

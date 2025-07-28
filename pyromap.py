@@ -3,6 +3,10 @@ import os
 import sys
 from services.firms import print_analytics, print_subset_info, get_timezone_for_location, print_california_timezones, subset_palisades_data, subset_eaton_data, convert_timezone_for_dataset
 from pages.home import display_home
+from pages.severity import display_severity
+from pages.danger import display_danger
+from pages.spread import display_spread
+
 from config import TIMEZONE
 
 # ENV SETUP: look into and find the proper commands for setting env variables
@@ -14,16 +18,18 @@ st.set_page_config(
     layout="centered"
 )
 
-st.title("2025 Eaton / Palisades Fires")
+st.title("2025 Eaton & Palisades Fire ML Analysis 🔥")
 
-# Create three tabs
-tab1, tab2, tab3, tab4, tab5 = st.tabs(["Fire Map", "Fire Severity Classification", "Thermal Signature Fingerprinting", "Most Dangerous Fires", "Fire Spread Estimator"])
+tab1, tab2, tab3, tab4 = st.tabs(["Fire Map 🗺️", "Severity Analysis 🔥", "Danger Assessment 🛑", "Fire Spread Prediction 🚒"])
 
 with tab1:
     display_home()
 
 with tab2:
-    st.write("Content for the Eaton tab.")
+    display_severity()
 
 with tab3:
-    st.write("Content for the Palisades tab.")
+    display_danger()
+
+with tab3:
+    display_spread()
