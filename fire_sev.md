@@ -1,17 +1,50 @@
 https://burnseverity.cr.usgs.gov/glossary#dnbr
 
 ## TODO
+- download the band composites for MODIS of the fire on a specific date and show the NBR visually
+- why is it normalized? how does the math behidn normalization work?
+
 - fire severity over time according to the defs of NDBI
-- write a 5mi section within the article explaining this section of the project
+- write a 5min section within the article explaining this section of the project
 - https://burnseverity.cr.usgs.gov/products/mtbs (make a sequence imagery of this)
 - make a sevrity chart over time 
 - make calculations and reasoning for which sensor data to use 
-- outline data source retrieval and processing using numpy and pandas 
-
+- outline data source retrieval and processing using numpy and pandas
 
 # Fire Severity Analysis
 Aggregate severity scores by date/time.
 Plot severity over time (e.g., line chart: x-axis = time, y-axis = severity)
+
+## Data Derivation 
+
+Downloading Granules 
+Granules are the individual data files that make up a dataset. They can be downloaded from various sources, including NASA's Earthdata Search, LP DAAC, and other data repositories.
+
+Paper Ref: https://essd.copernicus.org/articles/13/1925/2021/essd-13-1925-2021.pdf
+
+> MODIS/Terra Surface Reflectance 8-Day L3 Global 500m SIN Grid V061 (MOD09A1):
+> https://search.earthdata.nasa.gov/search/granules?p=C2343111356-LPCLOUD!C2343111356-LPCLOUD&pg[1][v]=t&pg[1][gsk]=-start_date&q=MOD09A1&fi=MODIS&fdc=Land%2BProcess%2BDistributed%2BActive%2BArchive%2BCenter%2B%2528LPDAAC%2529&tl=1352288806.226!5!!&lat=24.936748217822768&long=-51.81333726997593
+
+> MODIS/Aqua Surface Reflectance 8-Day L3 Global 500m SIN Grid V061 (MYD09A1)
+> MODIS/Terra+Aqua Burned Area Monthly L3 Global 500m SIN Grid V061 (MCD64A1)
+
+"""
+The MOSEV database was built using the following remote
+sensing data available since November 2000 as input (Fig. 1).
+– All scenes of MODIS Terra MOD09A1 and Aqua
+MYD09A1 version 6. Terra MOD09A1 and Aqua
+MYD09A1 scenes are 8 d composites with seven surface reflectance bands and quality information at a spatial resolution of 500 m and global coverage. The reflectance value of each pixel is the best possible observation in the 8 d period, selected according to quality criteria including cloud cover, cloud shadow, solar
+zenith and aerosol loading.
+– All scenes of MCD64A1 version 6 product. MCD64A1
+is a monthly 500 m pixel product that contains daily
+global information on burn date, uncertainty in burn
+date, quality assurance indicators, and first and last day
+of the year of reliable change detection.
+MOD09A1, MYD09A1 and MCD64A1 data were downloaded from the Land Processes Distributed Active Archive
+Center (LP-DAAC): https://lpdaac.usgs.gov/ (last access: 1
+November 2020).
+"""
+
 
 # Plotting the Satellite Fleet 
 -> Aqua // Terra: MODIS
