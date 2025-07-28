@@ -1,3 +1,5 @@
+Docs to save the config: https://docs.kepler.gl/docs/keplergl-jupyter#config
+
 ### 0x01 > Fire Severity Classification
 - Analyze fire images or sensor data to determine severity levels (low, medium, high)
 - Use machine learning models for classification

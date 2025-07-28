@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 import geopandas as gpd
 from keplergl import KeplerGl
 from streamlit_keplergl import keplergl_static
@@ -39,7 +40,10 @@ def _obtain_localized_fire_data(satellite_name):
 def _convert_dataframe_to_geopandas_coordinates(df):
     # create a new copy dataframe that only contains the lat and long columns
     df = df.copy()
-    df = df[["latitude", "longitude"]].dropna()
+
+    df = df[["latitude", "longitude", "brightness", "bright_t31", "frp"]].dropna()
+
+    print(df.head()),
 
     gdf = gpd.GeoDataFrame(
         df, geometry=gpd.points_from_xy(df.longitude, df.latitude), crs=COORDINATE_REFERENCE_SYSTEM
@@ -50,6 +54,29 @@ def _convert_dataframe_to_geopandas_coordinates(df):
 """
 Main function to display the contents of the home page within the Streamlit application
 """
+
+def display_map(satellite_name, date_range):
+    perimeter_data = _obtain_perimeter_data()
+    fire_subset_data = _obtain_localized_fire_data(satellite_name)
+
+    for fire in ["eaton", "palisades"]:
+        mask = (pd.to_datetime(fire_subset_data[fire]["acq_date"]) >= date_range[0]) & \
+               (pd.to_datetime(fire_subset_data[fire]["acq_date"]) <= date_range[1])
+        fire_subset_data[fire] = fire_subset_data[fire][mask]
+
+    combined_data = pd.concat([fire_subset_data["eaton"], fire_subset_data["palisades"]])
+    gpd_combined_points = _convert_dataframe_to_geopandas_coordinates(combined_data)
+
+    map_ = KeplerGl(height=600, config=custom_config)
+    map_.add_data(data=perimeter_data["eaton"], name="eaton-perimeter")
+    map_.add_data(data=perimeter_data["palisades"], name="palisades-perimeter")
+    map_.add_data(data=gpd_combined_points, name="fire-data")
+
+    html_path = "keplergl_map.html"
+    map_.save_to_html(file_name=html_path, read_only=True)
+    with open(html_path, "r", encoding="utf-8") as f:
+        html_content = f.read()
+    components.html(html_content, height=600, width=800)
 
 def display_menu():
     satellite_options = ["MODIS", "VIIRS_J1", "VIIRS_J2", "VIIRS_Suomi"]
@@ -75,35 +102,6 @@ def display_menu():
     )
 
     display_map(selected_satellite, date_range)
-
-def display_map(satellite_name, date_range):
-    # Set the origin of the map to the NADIR point
-    perimeter_data = _obtain_perimeter_data()
-    fire_subset_data = _obtain_localized_fire_data(satellite_name)
-
-    for fire in ["eaton", "palisades"]:
-        mask = (pd.to_datetime(fire_subset_data[fire]["acq_date"]) >= date_range[0]) & \
-               (pd.to_datetime(fire_subset_data[fire]["acq_date"]) <= date_range[1])
-        fire_subset_data[fire] = fire_subset_data[fire][mask]
-
-    gpd_eaton_points = _convert_dataframe_to_geopandas_coordinates(fire_subset_data["eaton"])
-    gpd_palisades_points = _convert_dataframe_to_geopandas_coordinates(fire_subset_data["palisades"])
-
-    map_ = KeplerGl(height=600, config=custom_config)
-    map_.add_data(data=perimeter_data["eaton"], name="2025 Eaton Fire")
-    map_.add_data(data=perimeter_data["palisades"], name="2025 Palisades Fire")
-
-    print("Eaton Fire Data:", gpd_eaton_points.head())
-    # Plot the localized fire data for both fires using geopoints
-    map_.add_data(data=gpd_eaton_points, name="Localized Eaton Fire Data")
-    map_.add_data(data=gpd_palisades_points, name="Localized Palisades Fire Data")
-
-    keplergl_static(
-        map_,
-        height=600,
-        width=800,
-        center_map=True
-    )
 
 def display_home():
     display_menu()

@@ -1,5 +1,4 @@
 # TODO
-- fix date time error in the code 
 - make each satellite marker a different color 
 - add a day/night toggle to the map
 - add a color magnitude / richensss display onto the map

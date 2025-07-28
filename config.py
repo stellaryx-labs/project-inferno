@@ -25,12 +25,76 @@ HOME_PAGE_PATH = ROOT_DIR / "main_map.html"
 PALISADES_PATH = ROOT_DIR / "palisades.html"
 EATON_PATH = ROOT_DIR / "eaton.html"
 
+# TODO: change the heatmap color range depending on the satellite data used
 custom_config = {
-    "mapState": {
-        "latitude": LAT,  # Default latitude
-        "longitude": LONG,  # Default longitude
-        "zoom": 9,  # Default zoom level
-        "bearing": 0,
-        "pitch": 0,
+    "version": "v1",
+    "config": {
+        "visState": {
+            "layers": [
+                    {
+                    "id": "heatmap-layer",
+                    "type": "heatmap",
+                    "config": {
+                        "dataId": "fire-data",
+                        "label": "Fire Heatmap",
+                        "colorField": None,
+                        "colorScale": "heatmap",
+                        "sizeField": None,
+                        "sizeScale": "linear",
+                        "visConfig": {
+                            "opacity": 0.8,
+                            "colorRange": {
+                                "name": "Global Warming",
+                                "type": "sequential",
+                                "category": "Uber",
+                                "colors": [
+                                    "#5A1846", "#900C3F", "#C70039", "#E3611C", "#F1920E", "#FFC300"
+                                ]
+                            },
+                            "radius": 20
+                        },
+                        "weightField": {
+                          "name": "frp", # shows the intensity for the heatmap
+                          "type": "real"
+                        }
+                    }
+                },
+                {
+                    "id": "eaton-perimeter",
+                    "type": "polygon",
+                    "config": {
+                        "dataId": "eaton-perimeter",
+                        "label": "Eaton Fire Perimeter",
+                        "visConfig": {
+                            "opacity": 0,  # Lower fill opacity
+                            "strokeOpacity": 0.8,
+                            "fillColor": [255, 140, 0],
+                            "outline": True
+                        }
+                    }
+                },
+                {
+                    "id": "palisades-perimeter",
+                    "type": "polygon",
+                    "config": {
+                        "dataId": "palisades-perimeter",
+                        "label": "Palisades Fire Perimeter",
+                        "visConfig": {
+                            "opacity": 0,  # Lower fill opacity
+                            "strokeOpacity": 0.8,
+                            "fillColor": [0, 140, 255],
+                            "outline": True
+                        }
+                    }
+                }
+            ]
+        },
+        "mapState": {
+            "latitude": LAT,
+            "longitude": LONG,
+            "zoom": 6,
+            "bearing": 0,
+            "pitch": 0
+        }
     }
 }
