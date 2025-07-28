@@ -98,7 +98,7 @@ custom_config = {
         "mapState": {
             "latitude": LAT,
             "longitude": LONG,
-            "zoom": 6,
+            "zoom": 10,
             "bearing": 0,
             "pitch": 0
         }
