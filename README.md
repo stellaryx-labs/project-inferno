@@ -1,6 +1,4 @@
-# Project Inferno
-
-![](banner.png)
+![Banner](https://github.com/stellaryx-labs/project-inferno/blob/main/captures/banner.png?raw=true)
 
 Project Inferno is a data processing and visualization pipeline that uses NASAâ€™s publicly available satellite remote sensing datasets to analyze wildfire extent and severity. By leveraging MODIS and VIIRS sensor data from FIRMS and EarthData Search, the pipeline extracts spectral band information, applies quality masks, and computes indices such as NBR, dNBR, and RdNBR to generate detailed burn severity maps.
 
@@ -11,9 +9,9 @@ Project Inferno is a data processing and visualization pipeline that uses NASAâ€
 **Read the Article**: 
 
 ## Project Showcase 
-![](feature_1.png)
-![](masking_display.png)
-![](nbr_visualization.png)
+![Feature 1](https://github.com/stellaryx-labs/project-inferno/blob/main/captures/feature_1.png)
+
+![Feature 2](https://github.com/stellaryx-labs/project-inferno/blob/main/captures/masking_display.png)
 
 ## Technologies Used
 - **Python** for data processing and analysis  
@@ -112,3 +110,4 @@ chmod +x run_inferno_pipeline.sh
 #### Future Features
 - Add traceability to the pipeline (to keep track of data lineage): look into the [trace](https://docs.python.org/3/library/trace.html) library
 - Add more visualizations for fire dynamics (esp for dNBR and RdNBR)
+
