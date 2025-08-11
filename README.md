@@ -6,7 +6,7 @@ Project Inferno is a data processing and visualization pipeline that uses NASAâ€
 - Severity analysis via algorithms calculating NBR, dNBR, and RdNBR  
 - Visualizations showcasing fire dynamics  
 
-**Read the Article**: [https://medium.com/@angelinatsuboi/project-inferno-wildfire-geospatial-analysis-of-the-2025-la-fires-b3a4b86e2516](https://medium.com/@angelinatsuboi/project-inferno-wildfire-geospatial-analysis-of-the-2025-la-fires-b3a4b86e2516)
+[**Read the Article**](https://medium.com/@angelinatsuboi/project-inferno-wildfire-geospatial-analysis-of-the-2025-la-fires-b3a4b86e2516)
 
 ## Project Showcase 
 ![Feature 2](https://github.com/stellaryx-labs/project-inferno/blob/main/captures/masking_display.png)
@@ -110,6 +110,7 @@ chmod +x run_inferno_pipeline.sh
 #### Future Features
 - Add traceability to the pipeline (to keep track of data lineage): look into the [trace](https://docs.python.org/3/library/trace.html) library
 - Add more visualizations for fire dynamics (esp for dNBR and RdNBR)
+
 
 
 
